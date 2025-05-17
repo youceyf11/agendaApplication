@@ -1,0 +1,32 @@
+<div class="app-container">
+  <app-navbar></app-navbar>
+  
+  <main class="main-content">
+    <div class="content-container">
+      <div class="header-actions">
+        <h1 class="app-title">Your Agenda</h1>
+        <button class="btn btn-primary" (click)="onAddItem()">Add New</button>
+      </div>
+      
+      <app-calendar 
+        [currentDate]="selectedDate"
+        (dateSelected)="onDateSelected($event)">
+      </app-calendar>
+      
+      <app-day-view 
+        [selectedDate]="selectedDate"
+        (editItem)="onEditItem($event)"
+        (deleteItem)="onDeleteItem($event)">
+      </app-day-view>
+      
+      <div *ngIf="showForm" class="form-overlay">
+        <app-agenda-item-form
+          [item]="selectedItem"
+          [selectedDate]="selectedDate"
+          (save)="onSaveItem($event)"
+          (cancel)="onCancelForm()">
+        </app-agenda-item-form>
+      </div>
+    </div>
+  </main>
+</div>

@@ -1,0 +1,37 @@
+<div class="calendar-container">
+  <div class="calendar-header">
+    <button (click)="previousMonth()" class="btn-nav">
+      <span>&#9664;</span>
+    </button>
+    <h2 class="calendar-title">{{getFormattedDate()}}</h2>
+    <button (click)="nextMonth()" class="btn-nav">
+      <span>&#9654;</span>
+    </button>
+  </div>
+  
+  <div class="calendar-grid">
+    <div class="weekday-header" *ngFor="let day of weekdays">{{day}}</div>
+    
+    <div *ngFor="let day of calendarDays" 
+         [class.current-month]="day.isCurrentMonth"
+         [class.other-month]="!day.isCurrentMonth"
+         [class.today]="day.isToday"
+         class="calendar-day"
+         (click)="onDateClick(day.date)">
+      
+      <div class="day-number">{{day.date | date:'d'}}</div>
+      
+      <div class="day-items" *ngIf="day.items.length > 0">
+        <div *ngFor="let item of day.items.slice(0, 3)" 
+             [class]="getPriorityClass(item.priority)"
+             class="day-item">
+          <span class="item-dot"></span>
+          <span class="item-title">{{item.title}}</span>
+        </div>
+        <div *ngIf="day.items.length > 3" class="more-items">
+          +{{day.items.length - 3}} more
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,53 @@
+<div class="notifications-container">
+  <!-- Notification Bell -->
+  <button class="notification-bell" (click)="togglePanel()">
+    <span class="bell-icon">🔔</span>
+    <span *ngIf="getUnreadCount() > 0" class="unread-badge">{{getUnreadCount()}}</span>
+  </button>
+  
+  <!-- Notification Panel -->
+  <div class="notification-panel" [class.show-panel]="showPanel">
+    <div class="panel-header">
+      <h3 class="panel-title">Notifications</h3>
+      <button *ngIf="notifications.length > 0" (click)="markAllAsRead()" class="mark-all-btn">
+        Mark all as read
+      </button>
+      <button class="close-btn" (click)="togglePanel()">×</button>
+    </div>
+    
+    <div class="panel-body">
+      <div *ngIf="notifications.length === 0" class="no-notifications">
+        <p>No notifications</p>
+      </div>
+      
+      <div *ngFor="let notification of notifications" 
+           class="notification-item"
+           [class]="getStatusClass(notification.status)">
+        
+        <div class="notification-content">
+          <p class="notification-message">{{notification.message}}</p>
+          <p class="notification-time">{{notification.scheduledTime | date:'short'}}</p>
+        </div>
+        
+        <div class="notification-actions">
+          <button 
+            *ngIf="notification.status !== 'READ'"
+            (click)="markAsRead(notification.id!)" 
+            class="action-btn"
+            title="Mark as read">
+            ✓
+          </button>
+          <button 
+            (click)="deleteNotification(notification.id!)" 
+            class="action-btn delete-btn"
+            title="Delete">
+            ×
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Overlay for closing panel when clicking outside -->
+  <div *ngIf="showPanel" class="panel-overlay" (click)="togglePanel()"></div>
+</div>

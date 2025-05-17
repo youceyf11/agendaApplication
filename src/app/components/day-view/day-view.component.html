@@ -1,0 +1,93 @@
+<div class="day-view-container">
+  <h2 class="day-title">{{getFormattedDate()}}</h2>
+
+  <div *ngIf="agendaItems.length === 0" class="no-items">
+    <p>No events or tasks for this day</p>
+  </div>
+
+  <div *ngIf="agendaItems.length > 0" class="items-list">
+    <!-- Section des tâches -->
+    <div *ngIf="hasTasks()" class="items-section">
+      <h3 class="section-title">Tasks</h3>
+      <ng-container *ngFor="let item of getTasks()">
+        <div class="agenda-item" [class]="getPriorityClass(item.priority)">
+          <div class="item-header">
+            <div class="task-checkbox">
+              <label [for]="'task-' + item.id">
+                <input
+                  type="checkbox"
+                  [id]="'task-' + item.id"
+                  [checked]="item.completed"
+                  (change)="onToggleComplete(item)"
+                >
+                <span class="sr-only">Mark {{item.title}} as completed</span>
+              </label>
+            </div>
+            <h4 class="item-title" [class.completed]="item.completed">
+              {{item.title}}
+            </h4>
+            <div class="item-actions">
+              <button class="btn-icon" (click)="onEdit(item)" title="Edit">
+                <span>✏️</span>
+              </button>
+              <button class="btn-icon" (click)="onDelete(item.id!)" title="Delete">
+                <span>🗑️</span>
+              </button>
+            </div>
+          </div>
+          <div class="item-details" *ngIf="item.description">
+            <p>{{item.description}}</p>
+          </div>
+          <div class="item-meta">
+            <div *ngIf="item.deadline" class="meta-item">
+              <span class="meta-label">Deadline:</span>
+              <span>{{item.deadline | date:'medium'}}</span>
+            </div>
+            <div *ngIf="item.reminder" class="meta-item">
+              <span class="meta-label">Reminder:</span>
+              <span>{{item.reminder | date:'medium'}}</span>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+
+    <!-- Section des événements -->
+    <div *ngIf="hasEvents()" class="items-section">
+      <h3 class="section-title">Events</h3>
+      <ng-container *ngFor="let item of getEvents()">
+        <div class="agenda-item" [class]="getPriorityClass(item.priority)">
+          <div class="item-header">
+            <div class="event-time">
+              {{getFormattedTime(item.startTime)}} - {{getFormattedTime(item.endTime)}}
+            </div>
+            <h4 class="item-title">
+              {{item.title}}
+            </h4>
+            <div class="item-actions">
+              <button class="btn-icon" (click)="onEdit(item)" title="Edit">
+                <span>✏️</span>
+              </button>
+              <button class="btn-icon" (click)="onDelete(item.id!)" title="Delete">
+                <span>🗑️</span>
+              </button>
+            </div>
+          </div>
+          <div class="item-details" *ngIf="item.description">
+            <p>{{item.description}}</p>
+          </div>
+          <div class="item-meta">
+            <div *ngIf="item.location" class="meta-item">
+              <span class="meta-label">Location:</span>
+              <span>{{item.location}}</span>
+            </div>
+            <div *ngIf="item.reminder" class="meta-item">
+              <span class="meta-label">Reminder:</span>
+              <span>{{item.reminder | date:'medium'}}</span>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</div>
