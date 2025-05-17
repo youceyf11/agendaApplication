@@ -24,6 +24,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "agenda_items")
@@ -49,15 +50,15 @@ public abstract class AgendaItem {
     @Column(nullable = false)
     private LocalDate date;
 
-    @Column
     private LocalDateTime reminder;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Priority priority;
 
-    @ManyToOne
+    @ManyToOne(fetch = javax.persistence.FetchType.LAZY)
     @JoinColumn(name = "user_id")
+    @JsonIgnore
     @JsonIgnoreProperties({"password", "email"})
     private User user;
 

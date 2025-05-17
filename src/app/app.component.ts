@@ -11,6 +11,7 @@ import { DayViewComponent } from './components/day-view/day-view.component';
 import { AgendaItemFormComponent } from './components/agenda-item-form/agenda-item-form.component';
 import { NotificationsComponent } from './components/notifications/notifications.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
+import { CalendarNavComponent } from './components/calendar-nav/calendar-nav.component';
 
 @Component({
   selector: 'app-root',
@@ -22,7 +23,8 @@ import { NavbarComponent } from './components/navbar/navbar.component';
     CalendarComponent,
     DayViewComponent,
     AgendaItemFormComponent,
-    NavbarComponent
+    NavbarComponent,
+    CalendarNavComponent
   ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']

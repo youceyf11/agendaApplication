@@ -8,27 +8,27 @@ import { Category } from '../../models/category.model';
 import { NgIf, NgFor } from '@angular/common';
 
 @Component({
-    selector: 'app-agenda-item-form',
-    templateUrl: './agenda-item-form.component.html',
-    standalone: true,
-    imports: [
-        ReactiveFormsModule,
-        NgIf,
-        NgFor
-    ],
-    styleUrls: ['./agenda-item-form.component.css']
+  selector: 'app-agenda-item-form',
+  standalone: true,
+  imports: [
+    ReactiveFormsModule,
+    NgIf,
+    NgFor
+  ],
+  templateUrl: './agenda-item-form.component.html',
+  styleUrls: ['./agenda-item-form.component.css']
 })
 export class AgendaItemFormComponent implements OnInit {
   @Input() item?: AgendaItem;
   @Input() selectedDate: Date = new Date();
   @Output() save = new EventEmitter<AgendaItem>();
   @Output() cancel = new EventEmitter<void>();
-  
-  form!: FormGroup;
+
+  agendaForm!: FormGroup;
   itemType = ItemType;
   priority = Priority;
   categories: Category[] = [];
-  
+
   constructor(
     private fb: FormBuilder,
     private categoryService: CategoryService
@@ -39,7 +39,7 @@ export class AgendaItemFormComponent implements OnInit {
     this.loadCategories();
     
     // When type changes, update form validation and fields
-    this.form.get('type')?.valueChanges.subscribe(type => {
+    this.agendaForm.get('type')?.valueChanges.subscribe(type => {
       this.updateFormForType(type);
     });
   }
@@ -52,7 +52,7 @@ export class AgendaItemFormComponent implements OnInit {
   
   private createForm() {
     // Initialize with common fields
-    this.form = this.fb.group({
+    this.agendaForm = this.fb.group({
       title: [this.item?.title || '', [Validators.required, Validators.maxLength(100)]],
       description: [this.item?.description || ''],
       type: [this.item?.type || ItemType.TASK],
@@ -70,31 +70,31 @@ export class AgendaItemFormComponent implements OnInit {
     });
     
     // Set initial form state based on item type
-    this.updateFormForType(this.form.get('type')?.value);
+    this.updateFormForType(this.agendaForm.get('type')?.value);
   }
   
   private updateFormForType(type: ItemType) {
     if (type === ItemType.TASK) {
-      this.form.get('deadline')?.enable();
-      this.form.get('completed')?.enable();
-      this.form.get('startTime')?.disable();
-      this.form.get('endTime')?.disable();
-      this.form.get('location')?.disable();
+      this.agendaForm.get('deadline')?.enable();
+      this.agendaForm.get('completed')?.enable();
+      this.agendaForm.get('startTime')?.disable();
+      this.agendaForm.get('endTime')?.disable();
+      this.agendaForm.get('location')?.disable();
     } else {
-      this.form.get('deadline')?.disable();
-      this.form.get('completed')?.disable();
-      this.form.get('startTime')?.enable();
-      this.form.get('endTime')?.enable();
-      this.form.get('location')?.enable();
+      this.agendaForm.get('deadline')?.disable();
+      this.agendaForm.get('completed')?.disable();
+      this.agendaForm.get('startTime')?.enable();
+      this.agendaForm.get('endTime')?.enable();
+      this.agendaForm.get('location')?.enable();
     }
   }
-  
+
   onSubmit() {
-    if (this.form.invalid) {
+    if (this.agendaForm.invalid) {
       return;
     }
     
-    const formValue = this.form.value;
+    const formValue = this.agendaForm.value;
     let agendaItem: AgendaItem;
     
     // Convert form date strings to Date objects
@@ -138,7 +138,7 @@ export class AgendaItemFormComponent implements OnInit {
     
     this.save.emit(agendaItem);
   }
-  
+
   onCancel() {
     this.cancel.emit();
   }
@@ -148,8 +148,9 @@ export class AgendaItemFormComponent implements OnInit {
       return '';
     }
     
-    // Format to YYYY-MM-DD for input[type="date"]
-    return date.toISOString().split('T')[0];
+    // Ajuster la date pour le fuseau horaire local
+    const localDate = new Date(date.getTime() - (date.getTimezoneOffset() * 60000));
+    return localDate.toISOString().split('T')[0];
   }
   
   private formatTimeForInput(date?: Date): string {

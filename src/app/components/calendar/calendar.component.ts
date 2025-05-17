@@ -14,13 +14,16 @@ import {
 import { AgendaService } from '../../services/agenda.service';
 import { AgendaItem, Priority } from '../../models/agenda-item.model';
 import { DatePipe } from "@angular/common";
+import { NgFor, NgIf } from '@angular/common';
 
 @Component({
     selector: 'app-calendar',
     templateUrl: './calendar.component.html',
     standalone: true,
     imports: [
-        DatePipe
+        DatePipe,
+        NgFor,
+        NgIf
     ],
     styleUrls: ['./calendar.component.css']
 })

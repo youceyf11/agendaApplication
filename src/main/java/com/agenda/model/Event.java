@@ -10,10 +10,10 @@ import javax.persistence.Entity;
 @DiscriminatorValue("EVENT")
 public class Event extends AgendaItem {
 
-    @Column(name = "start_time", nullable = false)
+    @Column(name = "start_time")
     private LocalDateTime startTime;
 
-    @Column(name = "end_time", nullable = false)
+    @Column(name = "end_time")
     private LocalDateTime endTime;
 
     @Column

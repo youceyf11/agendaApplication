@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import com.agenda.model.AgendaItem;
 import com.agenda.model.AgendaItem.Priority;
+import com.agenda.model.User;
 
 @Repository
 public interface AgendaItemRepository extends JpaRepository<AgendaItem, Long> {
@@ -35,4 +36,7 @@ public interface AgendaItemRepository extends JpaRepository<AgendaItem, Long> {
     List<AgendaItem> findByPriorityAndUserIdOrderByDateAsc(Priority priority, Long userId);
     
     List<AgendaItem> findByCategoryIdAndUserIdOrderByDateAsc(Long categoryId, Long userId);
+
+    List<AgendaItem> findByUserAndDate(User user, LocalDate date);
+    List<AgendaItem> findByUser(User user);
 }
